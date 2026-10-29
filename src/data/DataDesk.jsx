@@ -88,6 +88,7 @@ function Importer({ t, tab, setTab, busy, guarded, load, lang }) {
   const [url, setUrl] = useState('')
   const [tables, setTables] = useState(null)
   const [ind, setInd] = useState(INDICATORS[3])
+  const [indName, setIndName] = useState('') // English name of an indicator picked through search
   const [countries, setCountries] = useState(['PAK', 'DEU', 'IND', 'BGD'])
   const [from, setFrom] = useState(2000)
   const [to, setTo] = useState(2023)
@@ -115,7 +116,7 @@ function Importer({ t, tab, setTab, busy, guarded, load, lang }) {
       if (!res?.ok) throw new Error('net')
       const [, rows] = await res.json()
       if (!rows?.length) throw new Error('wb')
-      const label = t.indicators[ind]
+      const label = t.indicators[ind] || indName || ind
       const table = [['Country', 'ISO3', 'Year', label], ...rows.map((r) => [r.country.value, r.countryiso3code, r.date, r.value == null ? '' : String(r.value)])]
       load(table, { name: `World Bank ${ind}`, source: `World Bank Open Data (${ind})`, title: label })
     })
@@ -186,6 +187,7 @@ function Importer({ t, tab, setTab, busy, guarded, load, lang }) {
                   {INDICATORS.map((id) => (
                     <option key={id} value={id}>{t.indicators[id]}</option>
                   ))}
+                  {!INDICATORS.includes(ind) && <option value={ind}>{indName || ind}</option>}
                 </select>
               </label>
               <label>
@@ -197,6 +199,13 @@ function Importer({ t, tab, setTab, busy, guarded, load, lang }) {
                 <input type="number" min="1960" max="2025" value={to} onChange={(e) => setTo(+e.target.value)} />
               </label>
             </div>
+            <IndicatorSearch
+              t={t}
+              onPick={(id, name) => {
+                setInd(id)
+                setIndName(name)
+              }}
+            />
             <span className="small">{t.wbCountries}</span>
             <div className="facet-chips" dir="ltr">
               {COUNTRIES.map(([iso, name]) => {
@@ -222,6 +231,110 @@ function Importer({ t, tab, setTab, busy, guarded, load, lang }) {
           </div>
         )}
       </div>
+    </div>
+  )
+}
+
+// Everyday words → the formal terms the World Bank uses in indicator names
+const SEARCH_ALIASES = {
+  girl: ['female', 'girl'], girls: ['female', 'girl'], woman: ['female', 'women'], women: ['female', 'women'],
+  boy: ['male', 'boy'], boys: ['male', 'boy'], man: ['male'], men: ['male'],
+  child: ['child', 'infant', 'under-5'], children: ['child', 'infant', 'under-5'], kids: ['child'], baby: ['infant', 'newborn', 'neonatal'], babies: ['infant', 'newborn', 'neonatal'],
+  school: ['school', 'enrol', 'education', 'primary', 'secondary', 'tertiary'], schools: ['school', 'enrol', 'education'], education: ['education', 'school', 'enrol', 'literacy'],
+  jobs: ['employ', 'labor'], job: ['employ', 'labor'], work: ['employ', 'labor'], jobless: ['unemploy'],
+  poor: ['poverty', 'poor'], death: ['mortality', 'death'], deaths: ['mortality', 'death'], die: ['mortality', 'death'],
+  hunger: ['undernourish', 'food', 'hunger'], food: ['food', 'undernourish', 'cereal'],
+  climate: ['emission', 'co2', 'greenhouse', 'climate'], pollution: ['pollution', 'pm2.5', 'emission'], air: ['air', 'pm2.5'],
+  electricity: ['electric'], power: ['electric', 'energy'], internet: ['internet'], phone: ['mobile', 'telephone'],
+  money: ['gdp', 'income', 'us$'], rich: ['income', 'gdp'], prices: ['inflation', 'price'], debt: ['debt'],
+  doctors: ['physician'], hospital: ['hospital'], water: ['water'], toilet: ['sanitation'], toilets: ['sanitation'],
+}
+
+// Search across all ~1,500 World Bank indicators. The list loads only when the box is first used.
+function IndicatorSearch({ t, onPick }) {
+  const [list, setList] = useState(null)
+  const [state, setState] = useState('idle') // idle | loading | error
+  const [q, setQ] = useState('')
+
+  async function ensureList() {
+    if (list || state === 'loading') return
+    setState('loading')
+    try {
+      const res = await fetch('/api/indicators')
+      if (!res.ok) throw new Error('api')
+      setList((await res.json()).items)
+      setState('idle')
+    } catch {
+      try {
+        // fall back to the World Bank directly (larger download, same data)
+        const res = await fetch('https://api.worldbank.org/v2/sources/2/indicators?format=json&per_page=2000')
+        const [, rows] = await res.json()
+        setList(rows.map((r) => [r.id, r.name, r.topics?.[0]?.value?.trim() || '']))
+        setState('idle')
+      } catch {
+        setState('error')
+      }
+    }
+  }
+
+  const results = useMemo(() => {
+    const words = q.toLowerCase().split(/\s+/).filter((w) => w.length > 1)
+    if (!list || !words.length) return []
+    // every word must match, either itself or one of its formal equivalents
+    const options = words.map((w) => [w, ...(SEARCH_ALIASES[w] || [])])
+    const exact = (hay) => words.filter((w) => hay.includes(w)).length
+    return list
+      .filter(([id, name, topic]) => {
+        const hay = `${name} ${id} ${topic}`.toLowerCase()
+        return options.every((alts) => alts.some((a) => hay.includes(a)))
+      })
+      .sort((a, b) => {
+        const ha = a[1].toLowerCase()
+        const hb = b[1].toLowerCase()
+        return exact(hb) - exact(ha) || (ha.startsWith(words[0]) ? 0 : 1) - (hb.startsWith(words[0]) ? 0 : 1) || ha.length - hb.length
+      })
+      .slice(0, 30)
+  }, [list, q])
+
+  function pick([id, name]) {
+    onPick(id, name)
+    setQ('')
+  }
+
+  return (
+    <div className="ind-search">
+      <label>
+        <span>{t.wbSearch}</span>
+        <input
+          type="search"
+          value={q}
+          onFocus={ensureList}
+          onChange={(e) => {
+            ensureList()
+            setQ(e.target.value)
+          }}
+          onKeyDown={(e) => e.key === 'Enter' && results[0] && pick(results[0])}
+          placeholder={t.wbSearchPh}
+          dir="ltr"
+        />
+      </label>
+      <p className="muted small">
+        {state === 'loading' ? t.loading : state === 'error' ? t.err.net : list ? t.wbSearchHint(list.length) : t.wbSearchHint(1500)}
+      </p>
+      {q.trim().length > 1 && list && (
+        <div className="ind-results" role="listbox">
+          {results.length === 0 && <p className="muted small ind-empty">{t.wbNoMatch}</p>}
+          {results.map((r) => (
+            <button key={r[0]} type="button" role="option" className="ind-item" onClick={() => pick(r)} dir="ltr">
+              <span className="ind-name">{r[1]}</span>
+              <span className="ind-meta">
+                {r[0]}
+                {r[2] ? ` · ${r[2]}` : ''}
+              </span>
+            </button>
+          ))}
+        </div>
+      )}
     </div>
   )
 }

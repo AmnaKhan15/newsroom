@@ -382,6 +382,19 @@ html[lang='ur'] .how h2, html[lang='ur'] .why h2 { font-family: inherit; }
 .chip-label.contra { color: var(--red); }
 .checks-line { font-size: 12.5px; color: var(--muted); margin: -10px 0 20px; line-height: 1.6; }
 
+/* World Bank indicator search */
+.ind-search label { display: flex; flex-direction: column; gap: 4px; font-size: 12.5px; font-weight: 600; color: var(--ink-2); }
+.ind-search input { font: inherit; font-size: 14px; color: var(--ink); background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 9px 12px; outline: 0; width: 100%; }
+.ind-search input:focus { border-color: var(--accent); }
+.ind-search > p { margin: 6px 2px 0; }
+.ind-results { margin-top: 8px; max-height: 300px; overflow-y: auto; border: 1px solid var(--line); border-radius: 12px; background: var(--surface); }
+.ind-item { display: flex; flex-direction: column; gap: 2px; width: 100%; text-align: left; border: 0; border-bottom: 1px solid var(--line); background: none; padding: 10px 12px; color: var(--ink); }
+.ind-item:last-child { border-bottom: 0; }
+.ind-item:hover, .ind-item:focus-visible { background: var(--accent-soft); outline: 0; }
+.ind-name { font-size: 14px; line-height: 1.35; overflow-wrap: anywhere; }
+.ind-meta { font-size: 11.5px; color: var(--muted); font-family: ui-monospace, Menlo, monospace; }
+.ind-empty { padding: 10px 12px; margin: 0; }
+
 /* View tabs (Investigate / Data Desk) */
 .view-tabs { display: flex; gap: 2px; background: var(--surface-2); border: 1px solid var(--line); border-radius: 12px; padding: 3px; }
 .view-tabs button { border: 0; background: none; padding: 6px 14px; border-radius: 9px; font-size: 14px; font-weight: 600; color: var(--ink-2); }

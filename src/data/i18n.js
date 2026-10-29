@@ -44,6 +44,10 @@ export const DD = {
     webPick: 'Tables found on the page:',
     wbIndicator: 'What to show', wbCountries: 'Countries (up to 6)', wbFrom: 'From', wbTo: 'To', wbBtn: 'Load data',
     wbHint: 'Free data from the World Bank. No sign-up needed.',
+    wbSearch: 'Or search all World Bank measures',
+    wbSearchPh: 'e.g. poverty, girls school, air pollution, CO2…',
+    wbSearchHint: (n) => `Search ${n.toLocaleString('en')} measures. Names are in English, as published by the World Bank.`,
+    wbNoMatch: 'Nothing found. Try another word.',
     indicators: {
       'SP.POP.TOTL': 'Population', 'NY.GDP.PCAP.CD': 'GDP per person (US$)', 'EN.GHG.CO2.PC.CE.AR5': 'CO₂ emissions per person (t)',
       'SP.DYN.LE00.IN': 'Life expectancy (years)', 'IT.NET.USER.ZS': 'Internet users (% of population)', 'SL.UEM.TOTL.ZS': 'Unemployment (% of labour force)',
@@ -89,6 +93,10 @@ export const DD = {
     webPick: 'Gefundene Tabellen:',
     wbIndicator: 'Indikator', wbCountries: 'Länder (bis zu 6)', wbFrom: 'Von', wbTo: 'Bis', wbBtn: 'Daten laden',
     wbHint: 'Offene Daten der Weltbank. Kostenlos, ohne Schlüssel.',
+    wbSearch: 'Oder alle Weltbank-Kennzahlen durchsuchen',
+    wbSearchPh: 'z. B. poverty, girls school, air pollution, CO2…',
+    wbSearchHint: (n) => `${n.toLocaleString('de')} Kennzahlen durchsuchen. Die Namen sind auf Englisch, so wie die Weltbank sie veröffentlicht.`,
+    wbNoMatch: 'Nichts gefunden. Versuchen Sie ein anderes Wort.',
     indicators: {
       'SP.POP.TOTL': 'Bevölkerung', 'NY.GDP.PCAP.CD': 'BIP pro Kopf (US$)', 'EN.GHG.CO2.PC.CE.AR5': 'CO₂-Emissionen pro Kopf (t)',
       'SP.DYN.LE00.IN': 'Lebenserwartung (Jahre)', 'IT.NET.USER.ZS': 'Internetnutzer (% der Bevölkerung)', 'SL.UEM.TOTL.ZS': 'Arbeitslosigkeit (% der Erwerbspersonen)',
@@ -149,6 +157,10 @@ export const DD = {
     webPick: 'صفحے پر ملنے والی جدولیں:',
     wbIndicator: 'اشاریہ', wbCountries: 'ممالک (زیادہ سے زیادہ 6)', wbFrom: 'سے', wbTo: 'تک', wbBtn: 'ڈیٹا لوڈ کریں',
     wbHint: 'عالمی بینک کا کھلا ڈیٹا۔ مفت، کسی کلید کے بغیر۔',
+    wbSearch: 'یا عالمی بینک کے تمام پیمانے تلاش کریں',
+    wbSearchPh: 'مثلاً poverty، girls school، air pollution، CO2…',
+    wbSearchHint: (n) => `${n.toLocaleString('en')} پیمانوں میں تلاش کریں۔ نام انگریزی میں ہیں، جیسے عالمی بینک شائع کرتا ہے۔`,
+    wbNoMatch: 'کچھ نہیں ملا۔ کوئی اور لفظ آزمائیں۔',
     indicators: {
       'SP.POP.TOTL': 'آبادی', 'NY.GDP.PCAP.CD': 'فی کس جی ڈی پی (امریکی ڈالر)', 'EN.GHG.CO2.PC.CE.AR5': 'فی کس کاربن اخراج (ٹن)',
       'SP.DYN.LE00.IN': 'متوقع عمر (سال)', 'IT.NET.USER.ZS': 'انٹرنیٹ صارفین (آبادی کا %)', 'SL.UEM.TOTL.ZS': 'بے روزگاری (لیبر فورس کا %)',
