@@ -325,8 +325,13 @@ html[lang='ur'] .how h2, html[lang='ur'] .why h2 { font-family: inherit; }
 .news-body .muted { margin-top: auto; }
 
 /* PDF report (always light, rendered off-screen) */
-.report-host { position: fixed; left: -10000px; top: 0; width: 760px; pointer-events: none; }
-.rp { width: 760px; background: #fff; color: #111; font-family: 'Inter', Arial, sans-serif; font-size: 12px; line-height: 1.55; padding: 4px; }
+/* A4 minus 12 mm side margins = 186 mm ≈ 703 CSS px; the report must fit inside that or the PDF crops it */
+.report-host { position: fixed; left: -10000px; top: 0; width: 700px; pointer-events: none; }
+.rp { width: 100%; max-width: 700px; box-sizing: border-box; overflow-wrap: anywhere; background: #fff; color: #111; font-family: 'Inter', Arial, sans-serif; font-size: 12px; line-height: 1.55; padding: 4px; }
+.rp-table { table-layout: fixed; }
+.rp-table th:first-child { width: 18px; }
+.rp-table th:nth-child(3) { width: 82px; }
+.rp-table th:nth-child(5) { width: 70px; }
 .rp[lang='ur'] { font-family: 'Noto Nastaliq Urdu', 'Inter', sans-serif; line-height: 2.1; }
 .rp-mast { display: flex; justify-content: space-between; border-bottom: 3px solid #111; padding-bottom: 6px; font-size: 11px; letter-spacing: .08em; }
 .rp[lang='ur'] .rp-mast { letter-spacing: 0; }
@@ -348,7 +353,7 @@ html[lang='ur'] .how h2, html[lang='ur'] .why h2 { font-family: inherit; }
 .rp-table td { border-bottom: 1px solid #e3e3e3; padding: 7px 6px; vertical-align: top; }
 .rp-table td:first-child { width: 18px; color: #888; }
 .rp-table td:nth-child(3) { width: 82px; }
-.rp-table td:last-child { width: 80px; font-family: ui-monospace, monospace; font-size: 10px; }
+.rp-table td:last-child { font-family: ui-monospace, monospace; font-size: 10px; }
 .rp-table small { color: #888; }
 .rp-status { display: inline-block; font-weight: 700; font-size: 10px; padding: 2px 6px; border-radius: 4px; background: #eee; }
 .rp-status.supported { background: #dcf5ea; color: #08734f; }
