@@ -3,7 +3,7 @@
 Collects open evidence about a topic from public sources (no scraping):
   - GDELT DOC 2.0     : global news coverage, last 3 months
   - News RSS feeds    : the public feeds major outlets publish for readers and news apps
-                        (DW, BBC, Dawn, The Guardian, NPR, Tagesschau…), searched for the topic.
+                        (DW, BBC, Dawn, The Guardian, NYT, NPR, Tagesschau…), searched for the topic.
                         GDELT often refuses shared cloud servers, so the feeds keep news flowing.
   - The Guardian      : reporting from one reference outlet (needs GUARDIAN_API_KEY)
   - OpenAlex          : academic research
@@ -75,12 +75,22 @@ FEEDS = [
     ("DW Deutsch", "https://rss.dw.com/rdf/rss-de-all", "Germany", "German"),
     ("BBC News", "https://feeds.bbci.co.uk/news/world/rss.xml", "United Kingdom", "English"),
     ("BBC News", "https://feeds.bbci.co.uk/news/science_and_environment/rss.xml", "United Kingdom", "English"),
+    ("BBC News", "https://feeds.bbci.co.uk/news/health/rss.xml", "United Kingdom", "English"),
+    ("BBC News", "https://feeds.bbci.co.uk/news/technology/rss.xml", "United Kingdom", "English"),
+    ("BBC News", "https://feeds.bbci.co.uk/news/world/asia/rss.xml", "United Kingdom", "English"),
     ("BBC Urdu", "https://feeds.bbci.co.uk/urdu/rss.xml", "United Kingdom", "Urdu"),
     ("Dawn", "https://www.dawn.com/feeds/home", "Pakistan", "English"),
     ("The Express Tribune", "https://tribune.com.pk/feed/home", "Pakistan", "English"),
     ("The Guardian", "https://www.theguardian.com/world/rss", "United Kingdom", "English"),
     ("The Guardian", "https://www.theguardian.com/environment/rss", "United Kingdom", "English"),
     ("The Guardian", "https://www.theguardian.com/science/rss", "United Kingdom", "English"),
+    ("The Guardian", "https://www.theguardian.com/global-development/rss", "United Kingdom", "English"),
+    ("The Guardian", "https://www.theguardian.com/technology/rss", "United Kingdom", "English"),
+    ("The Guardian", "https://www.theguardian.com/world/pakistan/rss", "United Kingdom", "English"),
+    ("The New York Times", "https://rss.nytimes.com/services/xml/rss/nyt/World.xml", "United States", "English"),
+    ("The New York Times", "https://rss.nytimes.com/services/xml/rss/nyt/Climate.xml", "United States", "English"),
+    ("The New York Times", "https://rss.nytimes.com/services/xml/rss/nyt/Health.xml", "United States", "English"),
+    ("The New York Times", "https://rss.nytimes.com/services/xml/rss/nyt/Science.xml", "United States", "English"),
     ("Al Jazeera", "https://www.aljazeera.com/xml/rss/all.xml", "Qatar", "English"),
     ("France 24", "https://www.france24.com/en/rss", "France", "English"),
     ("The Hindu", "https://www.thehindu.com/news/international/feeder/default.rss", "India", "English"),
@@ -139,7 +149,7 @@ def rss_news(topic):
     # word stems, so "glaciers" matches "glacier" and "melting" matches "melt"
     stems = [w[: max(4, len(w) - 3)] if len(w) > 5 else w for w in words]
     need = len(stems) if len(stems) <= 2 else len(stems) - 1
-    pool = ThreadPoolExecutor(max_workers=10)
+    pool = ThreadPoolExecutor(max_workers=16)
     futures = [pool.submit(_fetch_feed, f) for f in FEEDS]
     done, _ = wait(futures, timeout=8)
     pool.shutdown(wait=False, cancel_futures=True)
