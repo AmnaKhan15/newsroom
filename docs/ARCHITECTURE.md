@@ -13,6 +13,7 @@ Investigate view ── GET  /api/sources?q= ───▶  sources.py ──▶ 
   · renders claims, news explorer, PDF report      (claim engine, no external AI)
 
 Data Desk view    ── GET  /api/table?url= ──▶  table.py   ──▶ public web page / CSV
+                  ── GET  /api/indicators ──▶  indicators.py ─▶ World Bank indicator list
   · parses files, cleans, queries, charts
   · World Bank API called directly from the browser (CORS allowed)
 ```
@@ -76,6 +77,18 @@ Returns every `<table>` on the page (largest first, up to 8, 5,000 rows each), o
 { "url": "…", "tables": [{ "caption": "…", "size": "239 × 6", "rows": [["Country", "Population"], …] }] }
 ```
 
+### `GET /api/indicators`
+
+All World Development Indicators (about 1,500), trimmed to code, English name and first topic, sorted by name.
+
+```jsonc
+{ "count": 1498, "items": [["SI.POV.DDAY", "Poverty headcount ratio at $3.00 a day (2021 PPP) (% of population)", "Poverty"], …] }
+```
+
+- About 150 KB instead of the World Bank's 1.5 MB (which includes long descriptions).
+- `Cache-Control: s-maxage=86400`, so Vercel serves it from the edge for a day.
+- The browser loads it only when the search box is first used, and falls back to the World Bank API directly if this endpoint fails.
+
 ## The claim engine (`api/analyze.py`)
 
 | Function | Job |
@@ -129,6 +142,7 @@ Everything is deterministic: the same input gives the same output, which makes t
 ## Extending
 
 - **Add a language:** add an entry to `LANGS` and a full block to `T` in `src/i18n.js` and to `DD` in `src/data/i18n.js`. Set `dir: 'rtl'` for right-to-left scripts.
-- **Add a World Bank indicator:** add its code to `INDICATORS` and a translated name to each `indicators` map in `src/data/i18n.js`.
+- **Add a World Bank quick pick:** add its code to `INDICATORS` and a translated name to each `indicators` map in `src/data/i18n.js`. (Every indicator is already reachable through search.)
+- **Improve indicator search:** add everyday words and their World Bank terms to `SEARCH_ALIASES` in `src/data/DataDesk.jsx`.
 - **Add synonyms:** add a space-separated group to `SYNONYMS` in `api/analyze.py`.
 - **Add a negation or wire service:** extend `NEGATION` or `WIRE` in `api/analyze.py`.
