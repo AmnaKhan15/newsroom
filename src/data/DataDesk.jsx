@@ -3,7 +3,6 @@ import { AGGS, clean, parseFile, parseText, profile, runQuery, toCSV } from './e
 import { Chart, downloadPNG, downloadSVG, makeFormat, save } from './Chart.jsx'
 import { embedUrl } from './embed.jsx'
 import { COUNTRIES, DD, INDICATORS } from './i18n.js'
-import { SAMPLE_CSV, SAMPLE_NAME } from './sample.js'
 
 const OPS = { text: ['=', '!=', 'contains'], date: ['=', '!=', 'contains'], number: ['>', '<', '=', '!='], year: ['=', '>', '<', '!='] }
 const isNum = (c) => c.type === 'number'
@@ -222,12 +221,6 @@ function Importer({ t, tab, setTab, busy, guarded, load, lang }) {
             </div>
           </div>
         )}
-      </div>
-      <div className="imp-foot">
-        <button className="link-btn" onClick={() => load(parseText(SAMPLE_CSV), { name: SAMPLE_NAME, source: 'Practice dataset (synthetic)' })}>
-          {t.sample}
-        </button>
-        <span className="muted small">({t.sampleNote})</span>
       </div>
     </div>
   )

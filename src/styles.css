@@ -377,7 +377,6 @@ html[lang='ur'] .how h2, html[lang='ur'] .why h2 { font-family: inherit; }
 .imp-row { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
 .imp-grid { display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 12px; }
 .imp-grid label, .q-row label, .chart-meta label { display: flex; flex-direction: column; gap: 4px; font-size: 12.5px; font-weight: 600; color: var(--ink-2); }
-.imp-foot { display: flex; gap: 8px; align-items: center; padding: 12px 20px; border-top: 1px solid var(--line); background: var(--surface-2); }
 .dropzone.big { flex-direction: column; justify-content: center; text-align: center; min-height: 140px; font-size: 14px; }
 .dz-icon { font-size: 22px; }
 .importer textarea, .text-in, .importer select, .importer input[type='number'], .q-row select, .q-filter select, .q-filter input, .chart-meta input {
