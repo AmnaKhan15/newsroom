@@ -4,8 +4,8 @@ import { ACCEPT, MAX_FILES, parseFile } from './docs.js'
 import { NewsExplorer } from './NewsExplorer.jsx'
 import { Report, downloadReport } from './Report.jsx'
 
-const STATUS_ICON = { supported: '✓', disputed: '✕', misleading: '!', unverified: '?' }
-const STATUSES = ['disputed', 'misleading', 'supported', 'unverified']
+const STATUS_ICON = { supported: '✓', disputed: '✕', unverified: '?' }
+const STATUSES = ['disputed', 'supported', 'unverified']
 
 function readLang() {
   try {
@@ -193,7 +193,7 @@ export default function App() {
             <strong>ClaimLens</strong> · {t.builtBy}
           </span>
           <span className="muted" dir="ltr">
-            GDELT · OpenAlex · Wikipedia · Google Fact Check Tools
+            GDELT · OpenAlex · Wikipedia
           </span>
         </div>
       </footer>
@@ -292,7 +292,6 @@ function Results({ t, lang, locale, topic, sources, analysis, documents }) {
     const m = {}
     sources.articles.forEach((a) => (m[a.id] = { url: a.url, title: a.title, sub: a.domain }))
     sources.papers.forEach((r) => (m[r.id] = { url: r.url, title: r.title, sub: r.venue || r.year }))
-    sources.factchecks.forEach((f) => (m[f.id] = { url: f.url, title: f.title || f.claim, sub: f.publisher }))
     documents.forEach((d) => (m[d.id] = { url: null, title: d.name, sub: d.name }))
     return m
   }, [sources, documents])
@@ -304,7 +303,7 @@ function Results({ t, lang, locale, topic, sources, analysis, documents }) {
   }, [sources])
 
   const counts = useMemo(() => {
-    const c = { supported: 0, disputed: 0, misleading: 0, unverified: 0 }
+    const c = { supported: 0, disputed: 0, unverified: 0 }
     analysis.claims.forEach((x) => c[x.status]++)
     return c
   }, [analysis])
@@ -324,11 +323,10 @@ function Results({ t, lang, locale, topic, sources, analysis, documents }) {
 
   return (
     <div className="results">
-      <div className={'stats' + (documents.length ? ' five' : '')}>
+      <div className={'stats' + (documents.length ? '' : ' three')}>
         <Stat n={nf.format(sources.articles.length)} label={t.statArticles} />
         <Stat n={nf.format(countries.length)} label={t.statCountries} />
         <Stat n={nf.format(sources.papers.length)} label={t.statPapers} />
-        <Stat n={nf.format(sources.factchecks.length)} label={t.statFactchecks} />
         {documents.length > 0 && <Stat n={nf.format(documents.length)} label={t.statDocs} />}
       </div>
 
@@ -345,7 +343,7 @@ function Results({ t, lang, locale, topic, sources, analysis, documents }) {
         <h2 className="serif" dir="auto">{topic}</h2>
         <p className="summary">
           {t.brief(topic, nf.format(sources.articles.length), nf.format(countries.length), nf.format(sources.papers.length), documents.length)}{' '}
-          {t.tally(counts.supported, counts.disputed + counts.misleading, counts.unverified)}
+          {t.tally(counts.supported, counts.disputed, counts.unverified)}
         </p>
         <div className="tally-bar" aria-hidden="true">
           {STATUSES.map((s) => counts[s] > 0 && <span key={s} className={s} style={{ flex: counts[s] }} />)}
@@ -452,10 +450,12 @@ function Results({ t, lang, locale, topic, sources, analysis, documents }) {
         </section>
       )}
 
-      <section className="block" id="news">
-        <SectionHead title={t.newsTitle} sub={t.newsSub} />
-        <NewsExplorer t={t} locale={locale} articles={sources.articles} countries={countries} terms={analysis.key_terms} />
-      </section>
+      {sources.articles.length > 0 && (
+        <section className="block" id="news">
+          <SectionHead title={t.newsTitle} sub={t.newsSub} />
+          <NewsExplorer t={t} locale={locale} articles={sources.articles} countries={countries} terms={analysis.key_terms} />
+        </section>
+      )}
 
       <section className="block">
         <SectionHead title={t.angles} />
@@ -487,29 +487,6 @@ function Results({ t, lang, locale, topic, sources, analysis, documents }) {
             </a>
           ))}
         </div>
-      </section>
-
-      <section className="block">
-        <SectionHead title={t.factchecks} />
-        {!sources.factcheck_enabled ? (
-          <p className="muted">{t.factcheckOff}</p>
-        ) : sources.factchecks.length === 0 ? (
-          <p className="muted">{t.noFactchecks}</p>
-        ) : (
-          <div className="factchecks">
-            {sources.factchecks.map((f) => (
-              <a className="fc card" key={f.id} href={f.url} target="_blank" rel="noreferrer" dir="auto">
-                <span className="fc-rating">{f.rating}</span>
-                <p className="fc-claim">“{f.claim}”</p>
-                <p className="muted small">
-                  <span className="sid">{f.id}</span> {f.publisher}
-                  {f.claimant ? ` · ${f.claimant}` : ''}
-                  {f.date ? ` · ${f.date}` : ''}
-                </p>
-              </a>
-            ))}
-          </div>
-        )}
       </section>
 
       <div className="report-host" aria-hidden="true">

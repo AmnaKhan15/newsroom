@@ -1,8 +1,8 @@
 # ClaimLens
 
 An open-source research and verification desk for journalists. Type a topic, optionally add your
-own documents, and ClaimLens collects global news coverage, academic research and published
-fact-checks, then rates the key claims as **corroborated / contested / misleading / unverified**,
+own documents, and ClaimLens collects global news coverage, academic research and background
+sources, then rates the key claims as **corroborated / contested / unverified**,
 each linked to its sources. Interface in **English, German and Urdu**. Runs entirely on free APIs.
 
 ## Features
@@ -16,21 +16,20 @@ each linked to its sources. Interface in **English, German and Urdu**. Runs enti
 
 | Step | What happens |
 |---|---|
-| Collect | `api/sources.py` queries free, open APIs in parallel: GDELT (world news), OpenAlex (research), Wikipedia in EN/DE/UR (background), Google Fact Check Tools (optional free key). No scraping. |
-| Number | Every source gets an ID: `A` article, `R` research, `F` fact-check, `D` your document. |
+| Collect | `api/sources.py` queries free, open APIs in parallel: GDELT (world news), OpenAlex (research), Wikipedia in EN/DE/UR (background). No scraping. |
+| Number | Every source gets an ID: `A` article, `R` research, `D` your document. |
 | Match | `api/analyze.py` extracts claim-like sentences and compares them with every other source by shared key terms. No generative AI, so nothing is invented. |
-| Rate | Published fact-check verdict → that rating. Debunking language in related sources → contested. Research plus independent outlets → corroborated. Otherwise → unverified. |
+| Rate | Debunking language in related sources → contested. Research plus independent outlets → corroborated. Otherwise → unverified. |
 
 Stack: React 18 + Vite, Python serverless functions on Vercel (standard library only), pdf.js and mammoth for document parsing, html2pdf for the brief.
 
-## Optional environment variables
+## Optional environment variable
 
 | Name | Adds | Where to get it (free) |
 |---|---|---|
-| `GOOGLE_FACTCHECK_API_KEY` | Published fact-checks | Google Cloud console → enable "Fact Check Tools API" → create API key |
 | `GUARDIAN_API_KEY` | Guardian articles | open-platform.theguardian.com/access |
 
-Without them the app still works with GDELT, OpenAlex, Wikipedia and your documents.
+Without it the app works fully with GDELT, OpenAlex, Wikipedia and your documents.
 
 ## Run locally
 
@@ -51,6 +50,6 @@ vercel --prod
 ## Limits
 
 Ratings are leads, not conclusions: they come from matching key terms between headlines,
-abstracts, documents and fact-check verdicts, not from reading full articles. GDELT allows one
+abstracts and documents, not from reading full articles. GDELT allows one
 request per 5 seconds per IP, so news can briefly be empty under load. Scanned PDFs (images
 without text) cannot be read.

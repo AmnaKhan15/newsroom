@@ -28,14 +28,13 @@ export function Report({ t, lang, locale, topic, sources, analysis, documents, c
       <h1 className="rp-h1" dir="auto">{topic}</h1>
       <p className="rp-lede">
         {t.brief(topic, sources.articles.length, countries.length, sources.papers.length, documents.length)}{' '}
-        {t.tally(counts.supported, counts.disputed + counts.misleading, counts.unverified)}
+        {t.tally(counts.supported, counts.disputed, counts.unverified)}
       </p>
 
       <div className="rp-glance avoid">
         <div><b>{nf.format(sources.articles.length)}</b>{t.statArticles}</div>
         <div><b>{nf.format(countries.length)}</b>{t.statCountries}</div>
         <div><b>{nf.format(sources.papers.length)}</b>{t.statPapers}</div>
-        <div><b>{nf.format(sources.factchecks.length)}</b>{t.statFactchecks}</div>
         {documents.length > 0 && <div><b>{documents.length}</b>{t.statDocs}</div>}
       </div>
 
@@ -143,11 +142,6 @@ export function Report({ t, lang, locale, topic, sources, analysis, documents, c
         {sources.papers.map((r) => (
           <li key={r.id}>
             <b>{r.id}</b> {r.authors.join(', ')} ({r.year}). {r.title}. <i>{r.venue}</i>. <span className="rp-url">{r.url}</span>
-          </li>
-        ))}
-        {sources.factchecks.map((f) => (
-          <li key={f.id}>
-            <b>{f.id}</b> {f.publisher}: “{f.claim}” rated {f.rating}. <span className="rp-url">{f.url}</span>
           </li>
         ))}
         {documents.map((d) => (

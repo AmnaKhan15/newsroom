@@ -4,7 +4,6 @@ Collects open evidence about a topic from public APIs (no scraping):
   - GDELT DOC 2.0     : global news coverage, last 3 months
   - The Guardian      : reporting from one reference outlet (needs GUARDIAN_API_KEY)
   - OpenAlex          : academic research
-  - Google Fact Check : existing fact-checks (needs GOOGLE_FACTCHECK_API_KEY)
   - Wikipedia         : neutral background
 """
 import json
@@ -119,29 +118,6 @@ def openalex(topic):
     return out
 
 
-def factchecks(topic):
-    key = os.environ.get("GOOGLE_FACTCHECK_API_KEY")
-    if not key:
-        return []
-    url = ("https://factchecktools.googleapis.com/v1alpha1/claims:search?pageSize=12&query="
-           + quote(topic) + "&key=" + quote(key))
-    data = fetch_json(url)
-    out = []
-    for c in data.get("claims", []):
-        for r in (c.get("claimReview") or [])[:1]:
-            out.append({
-                "id": f"F{len(out) + 1}",
-                "claim": c.get("text"),
-                "claimant": c.get("claimant"),
-                "rating": r.get("textualRating"),
-                "publisher": (r.get("publisher") or {}).get("name") or (r.get("publisher") or {}).get("site"),
-                "url": r.get("url"),
-                "title": r.get("title"),
-                "date": (r.get("reviewDate") or "")[:10] or None,
-            })
-    return out
-
-
 def wikipedia(topic):
     s = fetch_json("https://en.wikipedia.org/w/rest.php/v1/search/page?limit=1&q=" + quote(topic))
     pages = s.get("pages") or []
@@ -170,9 +146,8 @@ def wikipedia(topic):
 
 
 def collect(topic):
-    jobs = {"gdelt": gdelt, "guardian": guardian, "papers": openalex, "factchecks": factchecks, "background": wikipedia}
-    result = {"topic": topic, "errors": {},
-              "factcheck_enabled": bool(os.environ.get("GOOGLE_FACTCHECK_API_KEY"))}
+    jobs = {"gdelt": gdelt, "guardian": guardian, "papers": openalex, "background": wikipedia}
+    result = {"topic": topic, "errors": {}}
     with ThreadPoolExecutor(max_workers=5) as pool:
         futures = {name: pool.submit(fn, topic) for name, fn in jobs.items()}
         for name, fut in futures.items():

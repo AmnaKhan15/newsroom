@@ -8,9 +8,8 @@ No paid AI: this is a transparent, rule-based evidence engine.
   1. Split every source into sentences and tokens.
   2. Pick claim-like sentences (numbers, causal verbs) that mention the topic.
   3. Match each claim against every other source by shared key terms.
-  4. Rate it from what matched: a published fact-check verdict wins; otherwise
-     research + independent outlets = corroborated, debunk language = contested,
-     anything else = unverified.
+  4. Rate it from what matched: debunking language in related sources = contested,
+     research + independent outlets = corroborated, anything else = unverified.
 Every rating carries its basis (counts and source ids) so a journalist can check it.
 """
 import json
@@ -53,12 +52,6 @@ META_CUE = re.compile(
     r"examine|investigate|analy[sz]e)|aims? to|in this (review|paper|study)|beyond summari[sz]ing|"
     r"is discussed|are discussed|are reviewed|is reviewed)\b", re.I)
 
-FALSE_WORDS = ("false", "fake", "incorrect", "wrong", "pants on fire", "fabricated", "not true",
-               "no evidence", "inaccurate", "falsch", "untrue", "baseless", "hoax")
-MIXED_WORDS = ("misleading", "partly", "partially", "mixture", "mixed", "half", "missing context",
-               "exaggerat", "out of context", "unproven", "needs context", "distort", "irreführend")
-TRUE_WORDS = ("true", "correct", "accurate", "mostly true", "richtig", "wahr")
-
 
 def tokens(text):
     return [w for w in re.findall(r"[a-zà-ÿ0-9]+(?:[-'][a-zà-ÿ0-9]+)*", text.lower())
@@ -82,17 +75,6 @@ def sentences(text, lo=40, hi=320):
     return [p.strip() for p in parts if lo <= len(p.strip()) <= hi]
 
 
-def rate_factcheck(rating):
-    r = (rating or "").lower()
-    if any(w in r for w in MIXED_WORDS):
-        return "misleading"
-    if any(w in r for w in FALSE_WORDS):
-        return "disputed"
-    if any(w in r for w in TRUE_WORDS):
-        return "supported"
-    return "misleading"
-
-
 def build_units(data):
     """Every source becomes a unit: id, kind, text, key set, domain."""
     units = []
@@ -103,10 +85,6 @@ def build_units(data):
         body = f"{r.get('title') or ''}. {r.get('abstract') or ''}"
         units.append({"id": r["id"], "kind": "R", "text": body, "domain": r.get("venue"),
                       "sents": sentences(r.get("abstract")) or [r.get("title") or ""]})
-    for f in data.get("factchecks") or []:
-        units.append({"id": f["id"], "kind": "F", "text": f.get("claim") or "",
-                      "domain": f.get("publisher"), "rating": f.get("rating"),
-                      "sents": [f.get("claim") or ""]})
     for d in data.get("documents") or []:
         units.append({"id": d["id"], "kind": "D", "text": d.get("text") or "",
                       "domain": d.get("name"), "sents": sentences(d.get("text"))[:400]})
@@ -139,11 +117,6 @@ def match(claim_keys, topic_keys, units, own_id):
 
 
 def judge(claim, related):
-    fcs = [u for u in related if u["kind"] == "F"]
-    if fcs:
-        fc = fcs[0]
-        return rate_factcheck(fc.get("rating")), {"basis": "factcheck", "rating": fc.get("rating"),
-                                                    "publisher": fc.get("domain")}
     papers = [u for u in related if u["kind"] == "R"]
     news = [u for u in related if u["kind"] == "A"]
     docs = [u for u in related if u["kind"] == "D"]
@@ -160,8 +133,6 @@ def judge(claim, related):
 def extract_claims(units, topic_keys, idf):
     cands = []
     for u in units:
-        if u["kind"] == "F":
-            continue
         for s in u["sents"]:
             cue = CLAIM_CUE.search(s)
             if not cue or GAP_CUE.search(s) or META_CUE.search(s):
@@ -276,7 +247,7 @@ def analyze(data):
             "status": status, "basis": basis,
             "source_ids": [c["src"]["id"]] + [u["id"] for u in related],
         })
-    order = {"disputed": 0, "misleading": 1, "supported": 2, "unverified": 3}
+    order = {"disputed": 0, "supported": 1, "unverified": 2}
     claims.sort(key=lambda c: order[c["status"]])
 
     known, unknown = [], []
