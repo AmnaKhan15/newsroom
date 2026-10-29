@@ -467,14 +467,28 @@ html[lang='ur'] .how h2, html[lang='ur'] .why h2 { font-family: inherit; }
 .embed-credit { display: block; text-align: end; font-size: 11.5px; color: #898781; margin-top: 6px; text-decoration: none; font-family: system-ui, sans-serif; }
 
 /* Responsive */
+/* Grid and flex children may shrink below their content width; long words and links wrap */
+.grid-2 > *, .ku > *, .claims > *, .papers > *, .news-grid > *, .stats > *, .angles > *, .how-grid > *,
+.profile-grid > *, .imp-grid > *, .q-row > *, .why-inner > *, .chart-meta > * { min-width: 0; }
+.paper h4, .news-title, .claim-text, .claim-quote, .article-title, .claim-why, .doc-line, .prof-head b { overflow-wrap: anywhere; }
+.imp-grid select, .imp-grid input, .q-row select, .chart-meta input { width: 100%; }
+.importer, .chart-card, .query { max-width: 100%; }
+
 @media (max-width: 860px) {
   .grid-2, .ku, .claims, .papers, .why-inner { grid-template-columns: 1fr; }
   .angles, .how-grid, .progress, .stats, .stats.three, .news-grid { grid-template-columns: repeat(2, 1fr); }
+  .nav-links { display: none; }
+  .q-row { grid-template-columns: 1fr 1fr; }
+}
+@media (max-width: 640px) {
+  /* Header becomes two rows: logo + language, then full-width view tabs */
+  .nav-inner { flex-wrap: wrap; height: auto; padding: 10px 0; row-gap: 10px; }
+  .lang-switch { margin-inline-start: auto; }
+  .view-tabs { order: 3; width: 100%; }
+  .view-tabs button { flex: 1; }
 }
 @media (max-width: 560px) {
   .wrap { padding: 0 16px; }
-  .nav-links { display: none; }
-  .lang-switch { margin-inline-start: auto; }
   .hero { padding: 48px 0 28px; }
   .lede { font-size: 16px; }
   .search { flex-wrap: wrap; border-radius: 18px; padding: 8px; }
@@ -484,9 +498,30 @@ html[lang='ur'] .how h2, html[lang='ur'] .why h2 { font-family: inherit; }
   .angles, .how-grid, .progress, .news-grid { grid-template-columns: 1fr; }
   .facet { flex-direction: column; gap: 6px; }
   .nav-inner { gap: 10px; }
-  .logo span { display: none; }
-  .view-tabs button { padding: 6px 10px; font-size: 13px; }
-  .imp-grid, .q-row { grid-template-columns: 1fr 1fr; }
+  .view-tabs button { padding: 8px 10px; font-size: 14px; }
+  .imp-grid { grid-template-columns: 1fr 1fr; }
+  .imp-grid > label:first-child { grid-column: 1 / -1; }
+  .q-row { grid-template-columns: 1fr; }
+  .imp-tabs button { padding: 12px 14px; }
+  .imp-body { padding: 16px; }
+  .text-in { flex-basis: 100%; }
+  .imp-row .btn { width: 100%; }
+  .stats { gap: 8px; }
+  .stat { padding: 14px; }
+  .stat-n { font-size: 24px; }
+  .claim { padding: 16px; }
+  .chip-label { min-width: 0; width: 100%; }
+  /* Comfortable tap targets on touch screens */
+  .src-chip, .fchip, .chip, .claim-filter button, .lang-switch button, .view-toggle button, .x-btn, .doc-pill button { min-height: 32px; }
+  .src-chip, .fchip, .chip { display: inline-flex; align-items: center; }
+  .link-btn { padding: 6px 0; }
+  .news-toolbar { gap: 10px; }
+  .news-search { flex-basis: 100%; }
+  .export-row .btn { flex: 1 1 calc(50% - 8px); }
+  .chart-meta { flex-direction: column; align-items: stretch; }
+  .q-filter { width: 100%; }
+  .q-filter select, .q-filter input { flex: 1 1 40%; width: auto; }
+  .rp-two { grid-template-columns: 1fr; }
   .q-filter { flex-wrap: wrap; }
   .export-row .btn:last-child { margin-inline-start: 0; }
   .view-toggle { margin-inline-start: 0; }

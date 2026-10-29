@@ -80,7 +80,23 @@ export const Chart = forwardRef(function Chart({ result, title, source, locale, 
   const multi = series.length > 1
 
   const titleLines = wrap(title || '', Math.floor(width / 10))
-  const top = 18 + titleLines.length * 24 + (multi ? 42 : 14)
+  // Legend items flow onto extra rows when the chart is narrow (phones)
+  let lx = 0
+  let ly = 0
+  const legend = multi
+    ? series.map((s, si) => {
+        const w = 30 + Math.min(22, String(s.name).length) * 7
+        if (lx && lx + w > width - 32) {
+          lx = 0
+          ly += 20
+        }
+        const item = { s, si, x: lx, y: ly }
+        lx += w
+        return item
+      })
+    : []
+  const legendH = multi ? ly + 20 : 0
+  const top = 18 + titleLines.length * 24 + (multi ? 22 + legendH : 14)
   const bottom = 46
 
   let body = null
@@ -93,7 +109,8 @@ export const Chart = forwardRef(function Chart({ result, title, source, locale, 
     const lo = ticks[0]
     const hi = ticks[ticks.length - 1]
     const left = 14 + Math.max(...ticks.map((t) => fmt.axis(t).length)) * 7.2
-    const endLabel = multi && series.length <= 4 ? Math.min(140, Math.max(...series.map((s) => String(s.name).length)) * 7 + 14) : 0
+    // End-of-line labels only where there is room; on phones the legend names the lines
+    const endLabel = multi && series.length <= 4 && width >= 480 ? Math.min(140, Math.max(...series.map((s) => String(s.name).length)) * 7 + 14) : 0
     const right = 16 + endLabel
     const iw = width - left - right
     const ih = height - top - bottom
@@ -227,17 +244,12 @@ export const Chart = forwardRef(function Chart({ result, title, source, locale, 
         ))}
         {multi && (
           <g transform={`translate(16, ${18 + titleLines.length * 24 + 10})`}>
-            {series.reduce((acc, s, si) => {
-              const x = acc.x
-              acc.items.push(
-                <g key={s.name} transform={`translate(${x},0)`}>
-                  <rect width="12" height="12" rx="3" fill={pal.series[si]} />
-                  <text x="18" y="10.5" fontSize="12.5" fill={pal.ink2}>{String(s.name).slice(0, 22)}</text>
-                </g>,
-              )
-              acc.x += 30 + Math.min(22, String(s.name).length) * 7
-              return acc
-            }, { x: 0, items: [] }).items}
+            {legend.map(({ s, si, x, y }) => (
+              <g key={s.name} transform={`translate(${x},${y})`}>
+                <rect width="12" height="12" rx="3" fill={pal.series[si]} />
+                <text x="18" y="10.5" fontSize="12.5" fill={pal.ink2}>{String(s.name).slice(0, 22)}</text>
+              </g>
+            ))}
           </g>
         )}
         {body}
