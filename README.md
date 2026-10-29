@@ -2,7 +2,7 @@
 
 An open-source research and verification desk for journalists. Type a topic, optionally add your
 own documents, and Newsroom collects global news coverage, academic research and background
-sources, then rates the key claims as **corroborated / contested / unverified**,
+sources, then labels the key claims as **has evidence / disputed / not confirmed**,
 each linked to its sources. Interface in **English, German and Urdu**. Runs entirely on free APIs.
 
 ## Features
