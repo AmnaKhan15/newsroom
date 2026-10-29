@@ -11,7 +11,7 @@ export const T = {
     navNews: 'News', navHow: 'How it works', navWhy: 'Why',
     eyebrow: 'Open-source research & verification desk',
     heroTitle: 'Understand any story. Check every claim.',
-    heroSub: 'Enter a topic and, if you like, your own documents. ClaimLens gathers global news, peer-reviewed research and background sources, then checks which claims hold up. Every point links to its source.',
+    heroSub: 'Enter a topic and, if you like, your own documents. Newsroom gathers global news, peer-reviewed research and background sources, then checks which claims hold up. Every point links to its source.',
     placeholder: 'Try “microplastics”, “glacier melt Pakistan”, “AI deepfakes”…',
     search: 'Investigate', examples: 'Examples', exampleTopics: EXAMPLES,
     docsTitle: 'Your documents', docsOptional: 'optional',
@@ -24,7 +24,7 @@ export const T = {
     briefing: 'Briefing',
     engineBadge: 'Automated evidence matching · verify before publishing',
     brief: (topic, a, c, r, d) =>
-      `ClaimLens reviewed ${a} news articles from ${c} countries, ${r} research papers` +
+      `Newsroom reviewed ${a} news articles from ${c} countries, ${r} research papers` +
       (d ? ` and ${d} of your documents` : '') + ` on “${topic}”.`,
     tally: (s, d, u) => `${s} claims are corroborated, ${d} are contested, and ${u} remain unverified.`,
     known: 'What research establishes', unknown: 'Open questions in the research',
@@ -62,7 +62,7 @@ export const T = {
     download: 'Download PDF brief', preparing: 'Preparing PDF…',
     pdf: {
       kind: 'Research brief', review: 'For editorial review, not for publication', date: 'Date', topic: 'Topic',
-      prepared: 'Prepared with ClaimLens', numbers: 'At a glance', summary: 'Summary', claimTable: 'Claim check',
+      prepared: 'Prepared with Newsroom', numbers: 'At a glance', summary: 'Summary', claimTable: 'Claim check',
       th: ['#', 'Claim', 'Rating', 'Basis', 'Sources'], docs: 'Documents reviewed', sources: 'Source list',
       method: 'Methodology', page: 'Page',
     },
@@ -83,7 +83,7 @@ export const T = {
     navNews: 'Nachrichten', navHow: 'So funktioniert es', navWhy: 'Warum',
     eyebrow: 'Offener Recherche- und Verifikationsdesk',
     heroTitle: 'Jede Geschichte verstehen. Jede Behauptung prüfen.',
-    heroSub: 'Geben Sie ein Thema und auf Wunsch eigene Dokumente ein. ClaimLens sammelt weltweite Nachrichten, Fachstudien und Hintergrundquellen und prüft, welche Behauptungen standhalten. Jeder Punkt verweist auf seine Quelle.',
+    heroSub: 'Geben Sie ein Thema und auf Wunsch eigene Dokumente ein. Newsroom sammelt weltweite Nachrichten, Fachstudien und Hintergrundquellen und prüft, welche Behauptungen standhalten. Jeder Punkt verweist auf seine Quelle.',
     placeholder: 'Zum Beispiel „Mikroplastik“, „Gletscherschmelze Pakistan“…',
     search: 'Recherchieren', examples: 'Beispiele', exampleTopics: EXAMPLES,
     docsTitle: 'Ihre Dokumente', docsOptional: 'optional',
@@ -96,7 +96,7 @@ export const T = {
     briefing: 'Briefing',
     engineBadge: 'Automatischer Belegabgleich · vor Veröffentlichung prüfen',
     brief: (topic, a, c, r, d) =>
-      `ClaimLens hat ${a} Nachrichtenartikel aus ${c} Ländern, ${r} Fachstudien` +
+      `Newsroom hat ${a} Nachrichtenartikel aus ${c} Ländern, ${r} Fachstudien` +
       (d ? ` und ${d} Ihrer Dokumente` : '') + ` zum Thema „${topic}“ ausgewertet.`,
     tally: (s, d, u) => `${s} Behauptungen sind belegt, ${d} umstritten, ${u} unbestätigt.`,
     known: 'Was die Forschung belegt', unknown: 'Offene Fragen der Forschung',
@@ -134,7 +134,7 @@ export const T = {
     download: 'PDF-Briefing herunterladen', preparing: 'PDF wird erstellt…',
     pdf: {
       kind: 'Recherche-Briefing', review: 'Zur redaktionellen Prüfung, nicht zur Veröffentlichung', date: 'Datum', topic: 'Thema',
-      prepared: 'Erstellt mit ClaimLens', numbers: 'Auf einen Blick', summary: 'Zusammenfassung', claimTable: 'Faktencheck',
+      prepared: 'Erstellt mit Newsroom', numbers: 'Auf einen Blick', summary: 'Zusammenfassung', claimTable: 'Faktencheck',
       th: ['#', 'Behauptung', 'Bewertung', 'Grundlage', 'Quellen'], docs: 'Geprüfte Dokumente', sources: 'Quellenverzeichnis',
       method: 'Methodik', page: 'Seite',
     },
@@ -155,7 +155,7 @@ export const T = {
     navNews: 'خبریں', navHow: 'یہ کیسے کام کرتا ہے', navWhy: 'کیوں',
     eyebrow: 'اوپن سورس تحقیق اور تصدیق کا ڈیسک',
     heroTitle: 'ہر خبر کو سمجھیں۔ ہر دعوے کی جانچ کریں۔',
-    heroSub: 'کوئی موضوع لکھیں اور چاہیں تو اپنی دستاویزات بھی شامل کریں۔ کلیم لینس دنیا بھر کی خبریں، تحقیقی مقالے اور پس منظر کے ذرائع جمع کر کے جانچتا ہے کہ کون سے دعوے درست ہیں۔ ہر نکتہ اپنے ماخذ سے جڑا ہے۔',
+    heroSub: 'کوئی موضوع لکھیں اور چاہیں تو اپنی دستاویزات بھی شامل کریں۔ نیوز روم دنیا بھر کی خبریں، تحقیقی مقالے اور پس منظر کے ذرائع جمع کر کے جانچتا ہے کہ کون سے دعوے درست ہیں۔ ہر نکتہ اپنے ماخذ سے جڑا ہے۔',
     placeholder: 'مثلاً “microplastics”، “glacier melt Pakistan”…',
     search: 'تحقیق کریں', examples: 'مثالیں', exampleTopics: EXAMPLES,
     docsTitle: 'آپ کی دستاویزات', docsOptional: 'اختیاری',
@@ -168,7 +168,7 @@ export const T = {
     briefing: 'خلاصہ',
     engineBadge: 'خودکار شواہد کا موازنہ · شائع کرنے سے پہلے تصدیق کریں',
     brief: (topic, a, c, r, d) =>
-      `کلیم لینس نے “${topic}” پر ${c} ممالک کی ${a} خبروں، ${r} تحقیقی مقالوں` +
+      `نیوز روم نے “${topic}” پر ${c} ممالک کی ${a} خبروں، ${r} تحقیقی مقالوں` +
       (d ? ` اور آپ کی ${d} دستاویزات` : '') + ` کا جائزہ لیا۔`,
     tally: (s, d, u) => `${s} دعوے مصدقہ ہیں، ${d} متنازع ہیں، اور ${u} غیر مصدقہ ہیں۔`,
     known: 'تحقیق سے کیا ثابت ہے', unknown: 'تحقیق میں کھلے سوالات',
@@ -206,7 +206,7 @@ export const T = {
     download: 'PDF خلاصہ ڈاؤن لوڈ کریں', preparing: 'PDF تیار ہو رہی ہے…',
     pdf: {
       kind: 'تحقیقی بریف', review: 'ادارتی جائزے کے لیے، اشاعت کے لیے نہیں', date: 'تاریخ', topic: 'موضوع',
-      prepared: 'کلیم لینس سے تیار کردہ', numbers: 'ایک نظر میں', summary: 'خلاصہ', claimTable: 'دعووں کی جانچ',
+      prepared: 'نیوز روم سے تیار کردہ', numbers: 'ایک نظر میں', summary: 'خلاصہ', claimTable: 'دعووں کی جانچ',
       th: ['#', 'دعویٰ', 'درجہ', 'بنیاد', 'ذرائع'], docs: 'جانچی گئی دستاویزات', sources: 'ذرائع کی فہرست',
       method: 'طریقۂ کار', page: 'صفحہ',
     },

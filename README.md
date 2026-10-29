@@ -1,7 +1,7 @@
-# ClaimLens
+# Newsroom
 
 An open-source research and verification desk for journalists. Type a topic, optionally add your
-own documents, and ClaimLens collects global news coverage, academic research and background
+own documents, and Newsroom collects global news coverage, academic research and background
 sources, then rates the key claims as **corroborated / contested / unverified**,
 each linked to its sources. Interface in **English, German and Urdu**. Runs entirely on free APIs.
 

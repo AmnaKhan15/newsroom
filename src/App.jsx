@@ -9,7 +9,7 @@ const STATUSES = ['disputed', 'supported', 'unverified']
 
 function readLang() {
   try {
-    return localStorage.getItem('claimlens-lang') || 'en'
+    return localStorage.getItem('newsroom-lang') || 'en'
   } catch {
     return 'en'
   }
@@ -31,7 +31,7 @@ export default function App() {
     document.documentElement.lang = lang
     document.documentElement.dir = meta.dir
     try {
-      localStorage.setItem('claimlens-lang', lang)
+      localStorage.setItem('newsroom-lang', lang)
     } catch {}
   }, [lang, meta])
 
@@ -104,9 +104,9 @@ export default function App() {
     <div className="page">
       <header className="nav">
         <div className="wrap nav-inner">
-          <a className="logo" href="#top" aria-label="ClaimLens home">
+          <a className="logo" href="#top" aria-label="Newsroom home">
             <Logo />
-            <span>ClaimLens</span>
+            <span>Newsroom</span>
           </a>
           <nav className="nav-links">
             {result && <a href="#news">{t.navNews}</a>}
@@ -190,7 +190,7 @@ export default function App() {
       <footer className="footer">
         <div className="wrap footer-inner">
           <span>
-            <strong>ClaimLens</strong> · {t.builtBy}
+            <strong>Newsroom</strong> · {t.builtBy}
           </span>
           <span className="muted" dir="ltr">
             GDELT · OpenAlex · Wikipedia
@@ -537,10 +537,15 @@ function SourceChip({ id, src }) {
 
 function Logo() {
   return (
-    <svg width="28" height="28" viewBox="0 0 32 32" aria-hidden="true">
-      <circle cx="14" cy="14" r="9" fill="none" stroke="currentColor" strokeWidth="3.5" />
-      <path d="M21 21l7 7" stroke="currentColor" strokeWidth="3.5" strokeLinecap="round" />
-      <path d="M10 14.5l3 3 5-6" fill="none" stroke="var(--green)" strokeWidth="2.6" strokeLinecap="round" strokeLinejoin="round" />
+    // A newspaper page (the news) with a verification badge (the claim check)
+    <svg width="30" height="30" viewBox="0 0 32 32" aria-hidden="true">
+      <rect x="2.5" y="4" width="21" height="23" rx="3.5" fill="currentColor" opacity="0.12" />
+      <rect x="2.5" y="4" width="21" height="23" rx="3.5" fill="none" stroke="currentColor" strokeWidth="2.2" />
+      <rect x="6.5" y="8" width="13" height="3.6" rx="1.2" fill="currentColor" />
+      <path d="M6.5 15.5h6M6.5 19h6M6.5 22.5h4" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
+      <rect x="14.5" y="14.8" width="5" height="4.6" rx="1" fill="currentColor" opacity="0.55" />
+      <circle cx="24" cy="23.5" r="7" fill="var(--green)" stroke="var(--bg)" strokeWidth="2.4" />
+      <path d="M20.9 23.6l2.2 2.2 4-4.4" fill="none" stroke="#fff" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" />
     </svg>
   )
 }

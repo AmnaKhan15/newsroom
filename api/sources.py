@@ -15,7 +15,7 @@ from urllib.error import HTTPError
 from urllib.parse import parse_qs, quote, urlparse
 from urllib.request import Request, urlopen
 
-UA = "ClaimLens/1.0 (journalism research prototype)"
+UA = "Newsroom/1.0 (journalism research prototype)"
 TIMEOUT = 12
 
 

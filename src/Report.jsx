@@ -12,7 +12,7 @@ export function Report({ t, lang, locale, topic, sources, analysis, documents, c
   return (
     <div className="rp" dir={lang === 'ur' ? 'rtl' : 'ltr'} lang={lang}>
       <div className="rp-mast">
-        <span className="rp-brand">CLAIMLENS · {p.kind.toUpperCase()}</span>
+        <span className="rp-brand">NEWSROOM · {p.kind.toUpperCase()}</span>
         <span className="rp-review">{p.review}</span>
       </div>
       <div className="rp-slug">
@@ -164,7 +164,7 @@ export async function downloadReport(el, topic) {
   await html2pdf()
     .set({
       margin: [12, 12, 14, 12],
-      filename: `claimlens-brief-${slug}.pdf`,
+      filename: `newsroom-brief-${slug}.pdf`,
       image: { type: 'jpeg', quality: 0.95 },
       html2canvas: { scale: 2, useCORS: true, backgroundColor: '#ffffff' },
       jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
@@ -181,7 +181,7 @@ export async function downloadReport(el, topic) {
         pdf.setPage(i)
         pdf.setFontSize(8)
         pdf.setTextColor(140)
-        pdf.text(`ClaimLens  ·  ${i} / ${n}`, w - 12, h - 6, { align: 'right' })
+        pdf.text(`Newsroom  ·  ${i} / ${n}`, w - 12, h - 6, { align: 'right' })
       }
     })
     .save()
