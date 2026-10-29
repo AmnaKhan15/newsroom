@@ -3,6 +3,8 @@ import { LANGS, T } from './i18n.js'
 import { ACCEPT, MAX_FILES, parseFile } from './docs.js'
 import { NewsExplorer } from './NewsExplorer.jsx'
 import { Report, downloadReport } from './Report.jsx'
+import { DataDesk } from './data/DataDesk.jsx'
+import { DD } from './data/i18n.js'
 
 const STATUS_ICON = { supported: '✓', disputed: '✕', unverified: '?' }
 const STATUSES = ['disputed', 'supported', 'unverified']
@@ -23,6 +25,13 @@ export default function App() {
   const [step, setStep] = useState(0)
   const [result, setResult] = useState(null) // { sources, analysis, documents }
   const [error, setError] = useState(null)
+  const [view, setView] = useState(() => (location.hash === '#data' ? 'data' : 'investigate'))
+
+  function go(v) {
+    setView(v)
+    history.replaceState(null, '', v === 'data' ? '#data' : location.pathname)
+    window.scrollTo({ top: 0 })
+  }
 
   const t = T[lang]
   const meta = LANGS.find((l) => l.code === lang)
@@ -108,10 +117,17 @@ export default function App() {
             <Logo />
             <span>Newsroom</span>
           </a>
+          <div className="view-tabs" role="tablist">
+            {['investigate', 'data'].map((v) => (
+              <button key={v} role="tab" aria-selected={view === v} className={view === v ? 'active' : ''} onClick={() => go(v)}>
+                {DD[lang].nav[v]}
+              </button>
+            ))}
+          </div>
           <nav className="nav-links">
-            {result && <a href="#news">{t.navNews}</a>}
-            <a href="#how">{t.navHow}</a>
-            <a href="#why">{t.navWhy}</a>
+            {view === 'investigate' && result && <a href="#news">{t.navNews}</a>}
+            {view === 'investigate' && <a href="#how">{t.navHow}</a>}
+            {view === 'investigate' && <a href="#why">{t.navWhy}</a>}
           </nav>
           <div className="lang-switch" role="group" aria-label="Language">
             {LANGS.map((l) => (
@@ -123,6 +139,10 @@ export default function App() {
         </div>
       </header>
 
+      {view === 'data' ? (
+        <DataDesk lang={lang} locale={meta.locale} />
+      ) : (
+      <>
       <section className="hero" id="top">
         <div className="wrap hero-inner">
           <span className="eyebrow">{t.eyebrow}</span>
@@ -186,6 +206,8 @@ export default function App() {
           </div>
         </div>
       </section>
+      </>
+      )}
 
       <footer className="footer">
         <div className="wrap footer-inner">
@@ -193,7 +215,7 @@ export default function App() {
             <strong>Newsroom</strong> · {t.builtBy}
           </span>
           <span className="muted" dir="ltr">
-            GDELT · OpenAlex · Wikipedia
+            GDELT · OpenAlex · Wikipedia · World Bank Open Data
           </span>
         </div>
       </footer>
