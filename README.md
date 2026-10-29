@@ -177,6 +177,8 @@ Open http://localhost:5173. The website forwards `/api/*` to the Python server o
 
 The project is ready for Vercel as is: Vite builds the website and every file in `api/` becomes a Python function.
 
+The live site is connected to this repository: **every push to `main` deploys automatically** to [newsroom-seven-phi.vercel.app](https://newsroom-seven-phi.vercel.app). To run your own copy:
+
 ```bash
 npm i -g vercel
 vercel login
