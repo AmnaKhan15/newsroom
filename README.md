@@ -110,7 +110,7 @@ Optional: set `GUARDIAN_API_KEY` (free from [The Guardian Open Platform](https:/
 
 | Layer | Technology |
 |---|---|
-| Frontend | React 18, Vite 5, plain CSS (no UI framework) |
+| Frontend | React 18, Vite 6, plain CSS (no UI framework) |
 | Backend | Python 3.12 serverless functions on Vercel, **standard library only** |
 | Documents | pdf.js (PDF), mammoth (Word), read in the browser |
 | Data import | PapaParse (CSV), SheetJS (Excel) |
