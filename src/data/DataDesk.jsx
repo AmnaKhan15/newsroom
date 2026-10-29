@@ -180,16 +180,15 @@ function Importer({ t, tab, setTab, busy, guarded, load, lang }) {
         )}
         {tab === 'wb' && (
           <div className="imp-col">
+            <IndicatorSearch
+              t={t}
+              selected={{ id: ind, name: t.indicators[ind] || indName || ind }}
+              onPick={(id, name) => {
+                setInd(id)
+                setIndName(name)
+              }}
+            />
             <div className="imp-grid">
-              <label>
-                <span>{t.wbIndicator}</span>
-                <select value={ind} onChange={(e) => setInd(e.target.value)}>
-                  {INDICATORS.map((id) => (
-                    <option key={id} value={id}>{t.indicators[id]}</option>
-                  ))}
-                  {!INDICATORS.includes(ind) && <option value={ind}>{indName || ind}</option>}
-                </select>
-              </label>
               <label>
                 <span>{t.wbFrom}</span>
                 <input type="number" min="1960" max="2025" value={from} onChange={(e) => setFrom(+e.target.value)} />
@@ -199,13 +198,6 @@ function Importer({ t, tab, setTab, busy, guarded, load, lang }) {
                 <input type="number" min="1960" max="2025" value={to} onChange={(e) => setTo(+e.target.value)} />
               </label>
             </div>
-            <IndicatorSearch
-              t={t}
-              onPick={(id, name) => {
-                setInd(id)
-                setIndName(name)
-              }}
-            />
             <span className="small">{t.wbCountries}</span>
             <div className="facet-chips" dir="ltr">
               {COUNTRIES.map(([iso, name]) => {
@@ -250,11 +242,13 @@ const SEARCH_ALIASES = {
   doctors: ['physician'], hospital: ['hospital'], water: ['water'], toilet: ['sanitation'], toilets: ['sanitation'],
 }
 
-// Search across all ~1,500 World Bank indicators. The list loads only when the box is first used.
-function IndicatorSearch({ t, onPick }) {
+// One box to choose any of the ~1,500 World Bank indicators. Empty box: popular suggestions
+// (translated). Typing: search the full list, which loads the first time the box is used.
+function IndicatorSearch({ t, selected, onPick }) {
   const [list, setList] = useState(null)
   const [state, setState] = useState('idle') // idle | loading | error
   const [q, setQ] = useState('')
+  const [open, setOpen] = useState(false)
 
   async function ensureList() {
     if (list || state === 'loading') return
@@ -299,40 +293,72 @@ function IndicatorSearch({ t, onPick }) {
   function pick([id, name]) {
     onPick(id, name)
     setQ('')
+    setOpen(false)
   }
+
+  const typing = q.trim().length > 1
+  const popular = INDICATORS.map((id) => [id, t.indicators[id], ''])
+  const shown = typing ? results : popular
+
+  const item = (r) => (
+    <button
+      key={r[0]}
+      type="button"
+      role="option"
+      aria-selected={r[0] === selected.id}
+      className={'ind-item' + (r[0] === selected.id ? ' current' : '')}
+      onMouseDown={(e) => e.preventDefault()} // keep focus so the click lands before the list closes
+      onClick={() => pick(r)}
+      dir="auto"
+    >
+      <span className="ind-name">{r[1]}</span>
+      <span className="ind-meta" dir="ltr">
+        {r[0]}
+        {r[2] ? ` · ${r[2]}` : ''}
+      </span>
+    </button>
+  )
 
   return (
     <div className="ind-search">
       <label>
-        <span>{t.wbSearch}</span>
+        <span>{t.wbIndicator}</span>
         <input
           type="search"
           value={q}
-          onFocus={ensureList}
+          onFocus={() => {
+            setOpen(true)
+            ensureList()
+          }}
+          onBlur={() => setOpen(false)}
           onChange={(e) => {
             ensureList()
+            setOpen(true)
             setQ(e.target.value)
           }}
-          onKeyDown={(e) => e.key === 'Enter' && results[0] && pick(results[0])}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter' && shown[0]) pick(shown[0])
+            if (e.key === 'Escape') setOpen(false)
+          }}
           placeholder={t.wbSearchPh}
+          role="combobox"
+          aria-expanded={open}
           dir="ltr"
         />
       </label>
+      <div className="ind-current">
+        <span className="muted small">{t.wbSelected}:</span> <b dir="auto">{selected.name}</b>{' '}
+        <span className="ind-meta" dir="ltr">{selected.id}</span>
+      </div>
       <p className="muted small">
-        {state === 'loading' ? t.loading : state === 'error' ? t.err.net : list ? t.wbSearchHint(list.length) : t.wbSearchHint(1500)}
+        {state === 'loading' ? t.loading : state === 'error' ? t.err.net : t.wbSearchHint(list ? list.length : 1500)}
       </p>
-      {q.trim().length > 1 && list && (
+      {open && (
         <div className="ind-results" role="listbox">
-          {results.length === 0 && <p className="muted small ind-empty">{t.wbNoMatch}</p>}
-          {results.map((r) => (
-            <button key={r[0]} type="button" role="option" className="ind-item" onClick={() => pick(r)} dir="ltr">
-              <span className="ind-name">{r[1]}</span>
-              <span className="ind-meta">
-                {r[0]}
-                {r[2] ? ` · ${r[2]}` : ''}
-              </span>
-            </button>
-          ))}
+          {!typing && <p className="ind-head">{t.wbPopular}</p>}
+          {typing && !list && <p className="muted small ind-empty">{t.loading}</p>}
+          {typing && list && results.length === 0 && <p className="muted small ind-empty">{t.wbNoMatch}</p>}
+          {shown.map(item)}
         </div>
       )}
     </div>
