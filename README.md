@@ -58,7 +58,7 @@ It is a **research assistant, not an editor**. Results are hints for a journalis
 | Feature | What it does |
 |---|---|
 | Import | Upload CSV, Excel (XLSX) or JSON; paste rows; pull every table from a public web page; or load World Bank statistics for up to 6 countries. |
-| World Bank search | Choose from 10 translated quick picks, or search all ~1,500 World Bank measures in everyday words: “girls school” finds *Children out of school, primary, female*, “toilets” finds *basic sanitation services*. |
+| World Bank search | One search box for all ~1,500 World Bank measures, with popular ones suggested when it is empty. Everyday words work: “girls school” finds *Children out of school, primary, female*, “toilets” finds *basic sanitation services*. |
 | Tidy, with a log | Skips title and footnote lines, repeated headers and empty rows; reads numbers such as `1,240`, `1.234,5`, `Rs. 14.7 mn`, `(1,200)`, `−0.12%`; turns different date formats into one; marks `n/a` and `-` as missing; fixes different spellings of the same name; removes duplicate rows. Every change is listed. |
 | Columns | Shows each column's type, how complete it is, how many different values it has, its range and a small distribution chart. |
 | Ask the data | Filter, group, compare by a second column, and show count, total, average, middle value, lowest or highest. |

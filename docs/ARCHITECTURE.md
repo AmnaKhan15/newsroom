@@ -142,7 +142,7 @@ Everything is deterministic: the same input gives the same output, which makes t
 ## Extending
 
 - **Add a language:** add an entry to `LANGS` and a full block to `T` in `src/i18n.js` and to `DD` in `src/data/i18n.js`. Set `dir: 'rtl'` for right-to-left scripts.
-- **Add a World Bank quick pick:** add its code to `INDICATORS` and a translated name to each `indicators` map in `src/data/i18n.js`. (Every indicator is already reachable through search.)
+- **Add a popular World Bank suggestion:** add its code to `INDICATORS` and a translated name to each `indicators` map in `src/data/i18n.js`. These only appear as suggestions in the empty search box; every indicator is reachable by searching.
 - **Improve indicator search:** add everyday words and their World Bank terms to `SEARCH_ALIASES` in `src/data/DataDesk.jsx`.
 - **Add synonyms:** add a space-separated group to `SYNONYMS` in `api/analyze.py`.
 - **Add a negation or wire service:** extend `NEGATION` or `WIRE` in `api/analyze.py`.
