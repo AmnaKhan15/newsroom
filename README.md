@@ -2,7 +2,7 @@
 
 An open-source research and verification desk for journalists. Type a topic, optionally add your
 own documents, and Newsroom collects global news coverage, academic research and background
-sources, then labels the key claims as **has evidence / disputed / not confirmed**,
+sources, then labels the key claims as **has evidence / disputed / mixed evidence / not confirmed**,
 each linked to its sources. Interface in **English, German and Urdu**. Runs entirely on free APIs.
 
 ## Features
@@ -27,10 +27,13 @@ Many stories are hidden in messy public registries and statistics. The Data Desk
 
 | Step | What happens |
 |---|---|
-| Collect | `api/sources.py` queries free, open APIs in parallel: GDELT (world news), OpenAlex (research), Wikipedia in EN/DE/UR (background). No scraping. |
+| Collect | `api/sources.py` queries free, open APIs in parallel: GDELT (world news), OpenAlex (research), Wikipedia in EN/DE/UR (background). |
+| Read | `api/analyze.py` downloads the full text of the most relevant articles (public addresses only, size and time limits), not just headlines. |
 | Number | Every source gets an ID: `A` article, `R` research, `D` your document. |
-| Match | `api/analyze.py` extracts claim-like sentences and compares them with every other source by shared key terms. No generative AI, so nothing is invented. |
-| Rate | Debunking language in related sources → contested. Research plus independent outlets → corroborated. Otherwise → unverified. |
+| Match | Claim-like sentences are compared with the closest sentence in every other source, using concepts rather than exact words (“harm” ≈ “damage”, “heart” ≈ “cardiac”, “microplastics” ≈ “plastic particles”). No generative AI, so nothing is invented. |
+| Stance | Each matching sentence is checked for negation (“no link”, “did not find”, “not associated”) so a source that says the opposite counts *against* the claim. |
+| Independence | Copies, near-identical headlines and shared wire stories (Reuters, AP, AFP, PTI, APP…) count as one source, so repetition is not mistaken for proof. |
+| Rate | Only opposing sources → **disputed**. Both sides → **mixed evidence**. Research, or several independent reports from more than one country → **has evidence**. Otherwise → **not confirmed**. Every card shows the reason and an example sentence. |
 
 Stack: React 18 + Vite, Python serverless functions on Vercel (standard library only), pdf.js and mammoth for document parsing, html2pdf for the brief, PapaParse and SheetJS for data import, hand-built SVG charts.
 

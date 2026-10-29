@@ -6,8 +6,8 @@ import { Report, downloadReport } from './Report.jsx'
 import { DataDesk } from './data/DataDesk.jsx'
 import { DD } from './data/i18n.js'
 
-const STATUS_ICON = { supported: '✓', disputed: '✕', unverified: '?' }
-const STATUSES = ['disputed', 'supported', 'unverified']
+const STATUS_ICON = { supported: '✓', disputed: '✕', mixed: '±', unverified: '?' }
+const STATUSES = ['disputed', 'mixed', 'supported', 'unverified']
 
 function readLang() {
   try {
@@ -325,7 +325,7 @@ function Results({ t, lang, locale, topic, sources, analysis, documents }) {
   }, [sources])
 
   const counts = useMemo(() => {
-    const c = { supported: 0, disputed: 0, unverified: 0 }
+    const c = { supported: 0, disputed: 0, mixed: 0, unverified: 0 }
     analysis.claims.forEach((x) => c[x.status]++)
     return c
   }, [analysis])
@@ -365,11 +365,12 @@ function Results({ t, lang, locale, topic, sources, analysis, documents }) {
         <h2 className="serif" dir="auto">{topic}</h2>
         <p className="summary">
           {t.brief(topic, nf.format(sources.articles.length), nf.format(countries.length), nf.format(sources.papers.length), documents.length)}{' '}
-          {t.tally(counts.supported, counts.disputed, counts.unverified)}
+          {t.tally(counts.supported, counts.disputed, counts.mixed, counts.unverified)}
         </p>
         <div className="tally-bar" aria-hidden="true">
           {STATUSES.map((s) => counts[s] > 0 && <span key={s} className={s} style={{ flex: counts[s] }} />)}
         </div>
+        {analysis.checks && <p className="checks-line">{t.checks(analysis.checks)}</p>}
         {bg?.extract && (
           <p className="bg-text" dir="auto">
             {bg.extract}{' '}
@@ -432,10 +433,33 @@ function Results({ t, lang, locale, topic, sources, analysis, documents }) {
               </div>
               <p className="claim-text" dir="auto">“{c.claim}”</p>
               <p className="claim-why">{t.basis[c.basis.basis](c.basis)}</p>
-              <div className="src-chips">
-                {c.source_ids.map((id) => (
-                  <SourceChip key={id} id={id} src={index[id]} />
-                ))}
+              {c.basis.quote && (
+                <blockquote className={'claim-quote ' + c.basis.quote.stance} dir="auto">
+                  <span className="q-label">{c.basis.quote.stance === 'contra' ? t.opposite : t.supports}:</span> “{c.basis.quote.text}”{' '}
+                  <SourceChip id={c.basis.quote.id} src={index[c.basis.quote.id]} />
+                </blockquote>
+              )}
+              <div className="chip-groups">
+                <div className="src-chips">
+                  <span className="chip-label">{t.from}</span>
+                  <SourceChip id={c.source_id} src={index[c.source_id]} />
+                </div>
+                {c.support_ids.length > 0 && (
+                  <div className="src-chips">
+                    <span className="chip-label agree">✓ {t.supports}</span>
+                    {c.support_ids.map((id) => (
+                      <SourceChip key={id} id={id} src={index[id]} />
+                    ))}
+                  </div>
+                )}
+                {c.contra_ids.length > 0 && (
+                  <div className="src-chips">
+                    <span className="chip-label contra">✕ {t.opposite}</span>
+                    {c.contra_ids.map((id) => (
+                      <SourceChip key={id} id={id} src={index[id]} />
+                    ))}
+                  </div>
+                )}
               </div>
             </div>
           ))}

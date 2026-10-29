@@ -28,7 +28,7 @@ export function Report({ t, lang, locale, topic, sources, analysis, documents, c
       <h1 className="rp-h1" dir="auto">{topic}</h1>
       <p className="rp-lede">
         {t.brief(topic, sources.articles.length, countries.length, sources.papers.length, documents.length)}{' '}
-        {t.tally(counts.supported, counts.disputed, counts.unverified)}
+        {t.tally(counts.supported, counts.disputed, counts.mixed, counts.unverified)}
       </p>
 
       <div className="rp-glance avoid">

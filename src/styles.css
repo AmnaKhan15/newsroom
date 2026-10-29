@@ -361,6 +361,22 @@ html[lang='ur'] .how h2, html[lang='ur'] .why h2 { font-family: inherit; }
 .rp-url { color: #3b49c9; word-break: break-all; }
 .rp-method { margin-top: 18px; background: #f6f6f2; border-inline-start: 3px solid #a45a00; padding: 10px 12px; font-size: 11px; color: #333; }
 
+/* Evidence checks on claim cards */
+.claim.mixed { border-inline-start-color: var(--amber); }
+.status.mixed { background: var(--amber-soft); color: var(--amber); }
+.tally-bar .mixed { background: var(--amber); }
+.rp-status.mixed { background: #fdf0d8; color: #a45a00; }
+.claim-quote { margin: 0 0 14px; padding: 10px 12px; border-radius: 10px; font-size: 13.5px; color: var(--ink-2); background: var(--surface-2); border-inline-start: 3px solid var(--green); }
+.claim-quote.contra { border-inline-start-color: var(--red); }
+.claim-quote .q-label { font-weight: 700; color: var(--ink); }
+.claim-quote .src-chip { vertical-align: middle; }
+.chip-groups { display: flex; flex-direction: column; gap: 8px; margin-top: auto; }
+.chip-groups .src-chips { align-items: center; margin-top: 0; }
+.chip-label { font-size: 11.5px; font-weight: 700; color: var(--muted); min-width: 84px; }
+.chip-label.agree { color: var(--green); }
+.chip-label.contra { color: var(--red); }
+.checks-line { font-size: 12.5px; color: var(--muted); margin: -10px 0 20px; line-height: 1.6; }
+
 /* View tabs (Investigate / Data Desk) */
 .view-tabs { display: flex; gap: 2px; background: var(--surface-2); border: 1px solid var(--line); border-radius: 12px; padding: 3px; }
 .view-tabs button { border: 0; background: none; padding: 6px 14px; border-radius: 9px; font-size: 14px; font-weight: 600; color: var(--ink-2); }

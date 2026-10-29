@@ -88,7 +88,7 @@ def rebuild_abstract(inv):
         return ""
     words = sorted((pos, w) for w, positions in inv.items() for pos in positions)
     text = " ".join(w for _, w in words)
-    return text[:700] + ("…" if len(text) > 700 else "")
+    return text[:2000] + ("…" if len(text) > 2000 else "")
 
 
 def openalex(topic):
