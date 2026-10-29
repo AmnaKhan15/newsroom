@@ -2,6 +2,13 @@
   "name": "newsroom",
   "private": true,
   "version": "1.0.0",
+  "description": "Free, open-source research and verification desk for journalists: claim checking and data journalism tools in English, German and Urdu.",
+  "author": "Amna Khan",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/AmnaKhan15/newsroom.git"
+  },
   "type": "module",
   "scripts": {
     "dev": "vite",
