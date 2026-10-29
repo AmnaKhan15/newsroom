@@ -7,7 +7,7 @@ How Newsroom's code fits together, for developers who want to run, change or ext
 ```
 Browser (React + Vite)                         Vercel Python functions (stdlib only)
 ──────────────────────                         ─────────────────────────────────────
-Investigate view ── GET  /api/sources?q= ───▶  sources.py ──▶ GDELT, OpenAlex, Wikipedia
+Investigate view ── GET  /api/sources?q= ───▶  sources.py ──▶ news RSS feeds, GDELT, OpenAlex, Wikipedia
   · parses user files (pdf.js, mammoth)
                   ── POST /api/analyze ─────▶  analyze.py ──▶ fetches full article text
   · renders claims, news explorer, PDF report      (claim engine, no external AI)
@@ -34,12 +34,15 @@ Collects evidence in parallel (one thread per source) and numbers it.
   "papers":    [{ "id": "R1", "title": "…", "year": 2025, "url": "…", "venue": "…",
                   "cites": 120, "authors": ["…"], "abstract": "…" }],
   "background": { "en": { "title": "…", "extract": "…", "url": "…" }, "de": { … }, "ur": { … } },
+  "news_feeds": { "gdelt": 0, "rss": 11, "feeds_ok": 27, "feeds_tried": 29 },
   "errors":    { "gdelt": "HTTP Error 429: Too Many Requests" }   // per-source, never fatal
 }
 ```
 
-- GDELT allows one request per 5 seconds per IP; `sources.py` retries twice after 5.5 s.
-- Responses carry `Cache-Control: s-maxage=900`, so Vercel's edge cache absorbs repeat searches.
+- **News RSS feeds** (`FEEDS` in `sources.py`): 29 public feeds fetched in parallel (16 workers, 6 s each, 8 s total). RSS 2.0, RSS 1.0/RDF and Atom are parsed namespace-agnostically; items match when their title and description contain the topic's word stems (all of them for 1–2 words, all but one for longer topics).
+- **GDELT** allows one request per 5 seconds per IP and often refuses Vercel's shared servers, so it gets one 10-second attempt. When it answers, its first 25 results are listed before the feed items.
+- News items are merged and de-duplicated by link and by normalised headline.
+- Responses carry `Cache-Control: s-maxage=900`, or 60 s when a source failed, so a temporary refusal is retried soon.
 - `GUARDIAN_API_KEY` (optional) adds Guardian articles, merged and de-duplicated by URL.
 
 ### `POST /api/analyze`

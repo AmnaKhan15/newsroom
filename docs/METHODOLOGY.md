@@ -14,7 +14,8 @@ For a topic such as “microplastics health”, Newsroom asks four free, public 
 
 | Source | What we get |
 |---|---|
-| GDELT | Up to 45 news articles from the last 3 months, from many countries and languages |
+| News feeds | The latest stories from 29 public RSS feeds of major outlets (DW, BBC, Dawn, The Guardian, The New York Times, Tagesschau, BBC Urdu…) that mention the topic |
+| GDELT | News from the last 3 months, from many countries and languages, when it answers (it often refuses cloud servers) |
 | OpenAlex | 8 research papers, with title, authors, journal, citation count and summary (abstract) |
 | Wikipedia | A short neutral summary, in English, German or Urdu when available |
 | Your files | Up to 5 PDF, Word or text files you add |
@@ -145,7 +146,8 @@ Cells in a number column that can't be read are **left empty and counted** in th
 - **Understand meaning like a person.** Word groups and negation rules catch many cases, not all. Sarcasm, irony, quotes of other people's claims and complex sentences can be misread.
 - **Read everything.** Paywalled or blocked sites give only headlines; research is judged from abstracts.
 - **Judge source quality.** A small blog and a major newspaper both count as one news origin. A research paper counts more than news, but paper quality is not assessed.
-- **See beyond 3 months of news,** or beyond what GDELT and OpenAlex index.
+- **See older news.** Feeds hold only the latest stories; GDELT reaches 3 months back when it answers.
+- **See every outlet.** News comes from 29 chosen feeds and GDELT's index; local or paywalled outlets may be missing.
 - **Replace reporting.** Calling sources, reading documents in full and using editorial judgement are still the journalist's job.
 
 ## Why no generative AI?

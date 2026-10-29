@@ -2,6 +2,8 @@
 
 **A free, open-source research and verification desk for journalists, in English, German and Urdu.**
 
+**Live site: [newsroom-seven-phi.vercel.app](https://newsroom-seven-phi.vercel.app)**
+
 Newsroom has two parts:
 
 - **Investigate:** type a topic and, if you like, add your own files. Newsroom gathers world news, research papers and background facts, finds the main claims and shows which ones have evidence behind them, which are disputed, and which are not confirmed. Every label explains why and links to its sources.
@@ -46,7 +48,7 @@ It is a **research assistant, not an editor**. Results are hints for a journalis
 
 | Feature | What it does |
 |---|---|
-| Topic search | Collects up to 45 news articles from the last 3 months (worldwide, many languages), 8 research papers and a Wikipedia summary. |
+| Topic search | Collects up to 45 news articles (the latest stories from 29 news feeds, plus up to 3 months of world coverage from GDELT when it answers), 8 research papers and a Wikipedia summary. |
 | Your files | Add up to 5 PDF, Word or text files (press releases, reports, interview notes). Their claims are checked against everything else. |
 | Claim check | Each main claim gets a label: **Has evidence**, **Disputed**, **Mixed evidence** or **Not confirmed**, with the reason, an example sentence, and separate lists of sources that support it and sources that say the opposite. |
 | Explore the news | A timeline, a country chart, topics and languages. Click any of them to filter the articles; switch between cards and a list. |
@@ -99,7 +101,8 @@ All free and open; none needs a key.
 
 | Source | Used for |
 |---|---|
-| [GDELT](https://www.gdeltproject.org/) | World news coverage, last 3 months |
+| Public news RSS feeds | Latest stories from DW, BBC, BBC Urdu, Dawn, The Express Tribune, The Guardian, The New York Times, Al Jazeera, NPR, Tagesschau, CBC, ABC Australia, Euronews and more, searched for the topic and linked to the originals |
+| [GDELT](https://www.gdeltproject.org/) | World news coverage, last 3 months (often unavailable from shared cloud servers, see Limits) |
 | [OpenAlex](https://openalex.org/) | Research papers and abstracts |
 | [Wikipedia](https://www.wikipedia.org/) | Background summaries in English, German and Urdu |
 | [World Bank Open Data](https://data.worldbank.org/) | Country statistics in the Data Desk |
@@ -194,7 +197,8 @@ Or import the GitHub repository at [vercel.com/new](https://vercel.com/new) and 
 - Labels are **automatic hints, not verdicts.** Matching by meaning catches many cases but not all; always open the sources.
 - Some news sites block automatic reading or use paywalls; then only the headline is used.
 - Research is judged from abstracts, not full papers.
-- GDELT allows one request every 5 seconds per address, so news can be briefly unavailable when it is busy.
+- News feeds only contain each outlet's latest stories (usually the last few days), so niche or older topics may find little news.
+- GDELT allows one request every 5 seconds per internet address and often refuses shared cloud servers such as Vercel's, so on the live site news usually comes from the feeds alone.
 - Scanned PDFs (pictures of text) cannot be read.
 - In dates like `03/04/2024`, the day is read first (3 April), as in Pakistan and Germany.
 
