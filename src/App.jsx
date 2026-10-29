@@ -352,7 +352,7 @@ function Results({ t, lang, locale, topic, sources, analysis, documents }) {
         {documents.length > 0 && <Stat n={nf.format(documents.length)} label={t.statDocs} />}
       </div>
 
-      {sources.errors?.gdelt && !sources.articles.length && <div className="notice info">{t.noNews}</div>}
+      {!sources.articles.length && <div className="notice info">{t.noNews}</div>}
 
       <article className="card briefing">
         <div className="briefing-top">
