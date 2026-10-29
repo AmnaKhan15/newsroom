@@ -52,9 +52,11 @@ GAP_CUE = re.compile(
     r"research|knowledge)|knowledge gaps?|are lacking|lacking|challenges in|more research|future (research|studies|work)|inconclusive|"
     r"uncertain(ty|ties)?|need(s|ed)? to be|poorly understood|unknown)\b", re.I)
 HEDGE_CUE = re.compile(r"\b(may|might|could|possibly|suggests?|potential(ly)?|preliminary)\b", re.I)
-# Sentences about the paper itself ("this review aims to…") are not claims about the world
+# Sentences about the paper or book itself ("this review aims to…", "this volume will…")
+# are not claims about the world
 META_CUE = re.compile(
-    r"\b(this (review|study|paper|article|work|chapter)|we (review|discuss|present|propose|summari[sz]e|"
+    r"\b(this (review|study|paper|article|work|chapter|volume|book|edition|report|handbook|text|collection)|"
+    r"the (book|volume|authors?|editors?)|readers|textbook|we (review|discuss|present|propose|summari[sz]e|"
     r"examine|investigate|analy[sz]e)|aims? to|in this (review|paper|study)|beyond summari[sz]ing|"
     r"is discussed|are discussed|are reviewed|is reviewed)\b", re.I)
 
